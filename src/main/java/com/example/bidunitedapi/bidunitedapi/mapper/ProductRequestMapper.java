@@ -21,6 +21,7 @@ public class ProductRequestMapper {
                 .category(uploadProductRequestDto.getCategory())
                 .imagePath(uploadProductRequestDto.getImagePath())
                 .isApproved(uploadProductRequestDto.isApproved())
+                .rejected(uploadProductRequestDto.isRejected())
                 .build();
         return uploadProductRequest;
     }
@@ -28,6 +29,7 @@ public class ProductRequestMapper {
         UploadProductRequestDto uploadProductRequestDto=UploadProductRequestDto.builder()
                 .uploadDate(uploadProductRequest.getUploadDate())
                 .isApproved(uploadProductRequest.isApproved())
+                .rejected(uploadProductRequest.isRejected())
                 .id(uploadProductRequest.getId())
                 .price(uploadProductRequest.getPrice())
                 .year(uploadProductRequest.getYear())

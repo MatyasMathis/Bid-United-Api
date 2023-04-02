@@ -17,4 +17,5 @@ public class ProductDto {
     private String imagePath;
     private int price;
     private Long uploaderId;
+    private Long requestId;
 }

@@ -23,6 +23,7 @@ public class UploadProductRequest {
     private String imagePath;
     private int price;
     private boolean isApproved;
+    private boolean rejected;
     private String uploadDate;
     @ManyToOne
     @JoinColumn(name = "user_id")

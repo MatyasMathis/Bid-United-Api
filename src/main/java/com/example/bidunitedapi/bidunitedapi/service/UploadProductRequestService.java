@@ -13,4 +13,7 @@ public interface UploadProductRequestService {
     UploadProductRequestDto findById(Long id);
     void deleteById(Long id);
     void updateRequest(UploadProductRequestDto uploadProductRequestDto);
+    List<UploadRequestOutputDto> getRequestsByUser(String username);
+    List<UploadRequestOutputDto> getRequestsPendingByUser(String username);
+    List<UploadRequestOutputDto> getRequestsDeclinedByUser(String username);
 }

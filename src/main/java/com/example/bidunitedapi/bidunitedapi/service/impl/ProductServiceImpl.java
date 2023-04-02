@@ -26,4 +26,15 @@ public class ProductServiceImpl implements ProductService {
         Product product=ProductMapper.mapToProduct(productDto);
         productRepository.save(product);
     }
+
+    @Override
+    public void deleteById(Long id) {
+        productRepository.deleteById(id);
+    }
+
+    @Override
+    public ProductDto findByRequestId(Long id) {
+        Product product=productRepository.findByRequestId(id);
+        return ProductMapper.mapToDto(product);
+    }
 }

@@ -14,6 +14,7 @@ public class ProductMapper {
                 .imagePath(product.getImagePath())
                 .price(product.getPrice())
                 .uploaderId(product.getUploaderId())
+                .requestId(product.getRequestId())
                 .build();
         return productDto;
     }
@@ -28,6 +29,7 @@ public class ProductMapper {
                 .price(productDto.getPrice())
                 .year(productDto.getYear())
                 .uploaderId(productDto.getUploaderId())
+                .requestId(productDto.getRequestId())
                 .build();
         return product;
     }

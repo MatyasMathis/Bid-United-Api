@@ -45,9 +45,14 @@ public class AdminController {
     }
 
     @DeleteMapping("/admin/upload-requests/delete/{id}")
-    public ResponseEntity<Void> deleteRequest(@PathVariable("id")Long id){
+    public ResponseEntity<Void> declineRequest(@PathVariable("id")Long id){
         try {
-            uploadProductRequestService.deleteById(id);
+            //uploadProductRequestService.deleteById(id);
+
+            UploadProductRequestDto uploadProductRequestDto=uploadProductRequestService.findById(id);
+            uploadProductRequestDto.setRejected(true);
+            uploadProductRequestService.updateRequest(uploadProductRequestDto);
+
             HttpStatus status=HttpStatus.OK;
             return  new ResponseEntity<>(status);
         }
@@ -92,6 +97,7 @@ public class AdminController {
         productDto.setPrice(uploadProductRequestDto.getPrice());
         productDto.setImagePath(uploadProductRequestDto.getImagePath());
         productDto.setDescription(uploadProductRequestDto.getDescription());
+        productDto.setRequestId(uploadProductRequestDto.getId());
         return productDto;
     }
 }
