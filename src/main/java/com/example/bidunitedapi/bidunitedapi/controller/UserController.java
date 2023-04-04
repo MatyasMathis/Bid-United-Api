@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -119,19 +120,49 @@ public class UserController {
     @PostMapping("/user/save")
     public ResponseEntity<Void> saveItem(@RequestBody Map<String, Long> credentials){
         try {
-            SavedProductDto savedProductDto=new SavedProductDto();
-            savedProductDto.setProductId(credentials.get("productId"));
-            savedProductDto.setUserId(credentials.get("userId"));
+            if(savedProductService.getByUSerAndProduct(credentials.get("userId"), credentials.get("productId")).isEmpty()){
 
-            savedProductService.addSavedProduct(savedProductDto);
+                SavedProductDto savedProductDto=new SavedProductDto();
+                savedProductDto.setProductId(credentials.get("productId"));
+                savedProductDto.setUserId(credentials.get("userId"));
 
-            HttpStatus status=HttpStatus.OK;
+                savedProductService.addSavedProduct(savedProductDto);
 
-            return  new ResponseEntity<>(status);
+                HttpStatus status=HttpStatus.OK;
+                return  new ResponseEntity<>(status);
+            }
+            else {
+                HttpStatus status=HttpStatus.CONFLICT;
+                return  new ResponseEntity<>(status);
+            }
+
         }
         catch (Exception e){
             HttpStatus status=HttpStatus.NOT_FOUND;
             return new ResponseEntity<>(status);
         }
+    }
+
+    @GetMapping("/user/saved/{id}")
+    public ResponseEntity<List<ProductDto>> getAllRequests(@PathVariable("id") Long userId){
+        try{
+            HttpStatus status = HttpStatus.OK;
+            List<SavedProductDto> list=savedProductService.getByUser(userId);
+            List<ProductDto> productList=new ArrayList<>();
+
+            for (SavedProductDto savedProduct:list
+                 ) {
+                ProductDto productDto=productService.findById(savedProduct.getProductId());
+                productList.add(productDto);
+
+            }
+            return new ResponseEntity<>(productList,status);
+        }
+        catch (Exception e)
+        {
+            HttpStatus status = HttpStatus.NOT_FOUND;
+            return new ResponseEntity<>(status);
+        }
+
     }
 }

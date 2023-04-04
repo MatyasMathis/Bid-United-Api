@@ -7,4 +7,6 @@ import java.util.List;
 public interface SavedProductService {
     void addSavedProduct(SavedProductDto savedProductDto);
     List<SavedProductDto> getByUser(Long id);
+
+    List<SavedProductDto> getByUSerAndProduct(Long userId,Long productId);
 }
