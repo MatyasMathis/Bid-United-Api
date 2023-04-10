@@ -1,9 +1,12 @@
 package com.example.bidunitedapi.bidunitedapi.service.impl;
 
 import com.example.bidunitedapi.bidunitedapi.dto.ProductDto;
+import com.example.bidunitedapi.bidunitedapi.dto.UserDto;
 import com.example.bidunitedapi.bidunitedapi.entity.Product;
+import com.example.bidunitedapi.bidunitedapi.entity.User;
 import com.example.bidunitedapi.bidunitedapi.mapper.ProductMapper;
 import com.example.bidunitedapi.bidunitedapi.repository.ProductRepository;
+import com.example.bidunitedapi.bidunitedapi.repository.UserRepository;
 import com.example.bidunitedapi.bidunitedapi.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,10 +18,22 @@ import java.util.stream.Collectors;
 public class ProductServiceImpl implements ProductService {
     @Autowired
     private ProductRepository productRepository;
+    @Autowired
+    private UserRepository userRepository;
     @Override
     public List<ProductDto> getAllProducts() {
         List<Product> products=productRepository.findAll();
-        return products.stream().map(ProductMapper::mapToDto).collect(Collectors.toList());
+        List<ProductDto> productDtos= products.stream().map(ProductMapper::mapToDto).collect(Collectors.toList());
+
+        for (ProductDto product:productDtos
+             ) {
+
+            User user=userRepository.findById(product.getUploaderId()).get();
+            product.setPhoneNumber(user.getPhoneNumber());
+            product.setEmail(user.getEmail());
+        }
+
+        return productDtos;
     }
 
     @Override

@@ -143,6 +143,28 @@ public class UserController {
         }
     }
 
+    @PostMapping("/user/unsave")
+    public ResponseEntity<Void> unsaveItem(@RequestBody Map<String, Long> credentials){
+        try {
+            if(!savedProductService.getByUSerAndProduct(credentials.get("userId"), credentials.get("productId")).isEmpty()){
+                SavedProductDto savedProductDto=savedProductService.getByUSerAndProduct(credentials.get("userId"), credentials.get("productId")).get(0);
+                savedProductService.unsaveProduct(savedProductDto);
+
+                HttpStatus status=HttpStatus.OK;
+                return  new ResponseEntity<>(status);
+            }
+            else {
+                HttpStatus status=HttpStatus.CONFLICT;
+                return  new ResponseEntity<>(status);
+            }
+
+        }
+        catch (Exception e){
+            HttpStatus status=HttpStatus.NOT_FOUND;
+            return new ResponseEntity<>(status);
+        }
+    }
+
     @GetMapping("/user/saved/{id}")
     public ResponseEntity<List<ProductDto>> getAllRequests(@PathVariable("id") Long userId){
         try{
@@ -165,4 +187,20 @@ public class UserController {
         }
 
     }
+
+    @PostMapping("/user/issaved")
+    public ResponseEntity<Boolean> isSaved(@RequestBody Map<String, Long> credentials){
+        try {
+            if(savedProductService.getByUSerAndProduct(credentials.get("userId"), credentials.get("productId")).isEmpty()){
+                return new ResponseEntity<Boolean>(false,HttpStatus.OK);
+            }
+            return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+
+        }
+        catch (Exception e){
+            HttpStatus status=HttpStatus.NOT_FOUND;
+            return new ResponseEntity<>(status);
+        }
+    }
+
 }

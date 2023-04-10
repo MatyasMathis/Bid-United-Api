@@ -13,4 +13,6 @@ public class UserDto {
     private String username;
     private String password;
     private String token;
+    private String phoneNumber;
+    private String email;
 }

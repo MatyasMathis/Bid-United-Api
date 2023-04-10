@@ -9,4 +9,6 @@ public interface SavedProductService {
     List<SavedProductDto> getByUser(Long id);
 
     List<SavedProductDto> getByUSerAndProduct(Long userId,Long productId);
+
+    void unsaveProduct(SavedProductDto savedProductDto);
 }

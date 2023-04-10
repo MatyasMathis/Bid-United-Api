@@ -20,6 +20,8 @@ public class User {
     private String username;
     private String password;
     private String token;
+    private String phoneNumber;
+    private String email;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<UploadProductRequest> uploadProductRequestList;
 

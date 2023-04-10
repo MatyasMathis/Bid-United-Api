@@ -18,4 +18,6 @@ public class ProductDto {
     private int price;
     private Long uploaderId;
     private Long requestId;
+    private String phoneNumber;
+    private String email;
 }

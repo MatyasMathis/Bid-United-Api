@@ -33,4 +33,9 @@ public class SavedProductServiceImpl implements SavedProductService {
         List<SavedProduct> list=savedProductRepository.getSavedProductByUserIdAndProductId(userId,productId);
         return list.stream().map(SavedProductMapper::mapToDto).collect(Collectors.toList());
     }
+
+    @Override
+    public void unsaveProduct(SavedProductDto savedProductDto) {
+        savedProductRepository.deleteById(savedProductDto.getId());
+    }
 }
