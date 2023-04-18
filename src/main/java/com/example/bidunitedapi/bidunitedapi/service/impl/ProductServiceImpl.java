@@ -8,6 +8,7 @@ import com.example.bidunitedapi.bidunitedapi.mapper.ProductMapper;
 import com.example.bidunitedapi.bidunitedapi.repository.ProductRepository;
 import com.example.bidunitedapi.bidunitedapi.repository.UserRepository;
 import com.example.bidunitedapi.bidunitedapi.service.ProductService;
+import org.apache.catalina.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,6 +39,12 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void addProduct(ProductDto productDto) {
+        Product product=ProductMapper.mapToProduct(productDto);
+        productRepository.save(product);
+    }
+
+    @Override
+    public void updateProduct(ProductDto productDto) {
         Product product=ProductMapper.mapToProduct(productDto);
         productRepository.save(product);
     }

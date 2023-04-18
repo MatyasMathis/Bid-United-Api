@@ -1,9 +1,8 @@
 package com.example.bidunitedapi.bidunitedapi.controller;
 
-import com.example.bidunitedapi.bidunitedapi.dto.ProductDto;
-import com.example.bidunitedapi.bidunitedapi.dto.SavedProductDto;
-import com.example.bidunitedapi.bidunitedapi.dto.UploadProductRequestDto;
-import com.example.bidunitedapi.bidunitedapi.dto.UploadRequestOutputDto;
+import com.example.bidunitedapi.bidunitedapi.dto.*;
+import com.example.bidunitedapi.bidunitedapi.entity.Product;
+import com.example.bidunitedapi.bidunitedapi.service.BidService;
 import com.example.bidunitedapi.bidunitedapi.service.ProductService;
 import com.example.bidunitedapi.bidunitedapi.service.SavedProductService;
 import com.example.bidunitedapi.bidunitedapi.service.UploadProductRequestService;
@@ -29,6 +28,9 @@ public class UserController {
     private ProductService productService;
     @Autowired
     private SavedProductService savedProductService;
+
+    @Autowired
+    private BidService bidService;
 
     @PostMapping("/user/upload-request")
     public ResponseEntity<Void> addUploadRequest(@RequestBody Map<String, String> uploadRequest){
@@ -202,5 +204,29 @@ public class UserController {
             return new ResponseEntity<>(status);
         }
     }
+
+    ///Placing and Reading bids
+    @PostMapping("/user/newBid")
+    public ResponseEntity<Void> placeNewBid(@RequestBody BidRequest bidRequest) {
+        try {
+            BidDto newBid = new BidDto();
+            newBid.setAmount(bidRequest.getAmount());
+            LocalDate currentDate = LocalDate.now();
+            newBid.setCurrentDate(currentDate);
+            newBid.setUserId(bidRequest.getUserId());
+            newBid.setProductId(bidRequest.getProductId());
+
+            ProductDto product = productService.findById(bidRequest.getProductId());
+            product.setPrice(bidRequest.getAmount());
+            productService.updateProduct(product);
+
+            bidService.createBid(newBid);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (Exception e) {
+            HttpStatus status = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<>(status);
+        }
+    }
+
 
 }

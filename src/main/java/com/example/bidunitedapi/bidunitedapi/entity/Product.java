@@ -3,6 +3,8 @@ package com.example.bidunitedapi.bidunitedapi.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @Builder
 @Getter
 @Setter
@@ -22,4 +24,6 @@ public class Product {
     private int price;
     private Long uploaderId;
     private Long requestId;
+    private boolean isBought;
+    private LocalDate limitDate;
 }

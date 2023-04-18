@@ -21,7 +21,7 @@ public class ProductMapper {
 
     public static Product mapToProduct(ProductDto productDto){
         Product product=Product.builder()
-                //.id(Long.parseLong(productDto.getId()))
+                .id(Long.parseLong(productDto.getId()))
                 .category(productDto.getCategory())
                 .name(productDto.getName())
                 .description(productDto.getDescription())
