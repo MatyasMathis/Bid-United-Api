@@ -18,4 +18,5 @@ public class UploadRequestOutputDto {
     private int price;
     private String uploadDate;
     private String username;
+    private String expireDate;
 }

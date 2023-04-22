@@ -2,9 +2,11 @@ package com.example.bidunitedapi.bidunitedapi.service.impl;
 
 import com.example.bidunitedapi.bidunitedapi.dto.ProductDto;
 import com.example.bidunitedapi.bidunitedapi.dto.UserDto;
+import com.example.bidunitedapi.bidunitedapi.entity.Bid;
 import com.example.bidunitedapi.bidunitedapi.entity.Product;
 import com.example.bidunitedapi.bidunitedapi.entity.User;
 import com.example.bidunitedapi.bidunitedapi.mapper.ProductMapper;
+import com.example.bidunitedapi.bidunitedapi.repository.BidRepository;
 import com.example.bidunitedapi.bidunitedapi.repository.ProductRepository;
 import com.example.bidunitedapi.bidunitedapi.repository.UserRepository;
 import com.example.bidunitedapi.bidunitedapi.service.ProductService;
@@ -12,6 +14,7 @@ import org.apache.catalina.mapper.Mapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +24,8 @@ public class ProductServiceImpl implements ProductService {
     private ProductRepository productRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private BidRepository bidRepository;
     @Override
     public List<ProductDto> getAllProducts() {
         List<Product> products=productRepository.findAll();
@@ -38,8 +43,48 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    public List<ProductDto> getAllUnsoldProducts() {
+        verifyExpiredProducts();
+        List<Product> products=productRepository.findAll();
+        List<ProductDto> productDtos= products.stream() .filter(product -> !product.getExpired()).map(ProductMapper::mapToDto).collect(Collectors.toList());
+
+        for (ProductDto product:productDtos
+        ) {
+
+            User user=userRepository.findById(product.getUploaderId()).get();
+            product.setPhoneNumber(user.getPhoneNumber());
+            product.setEmail(user.getEmail());
+        }
+
+        return productDtos;
+    }
+
+    public void verifyExpiredProducts(){
+        List<Product> products=productRepository.findAll();
+        LocalDate currentdate=LocalDate.now();
+
+        for (Product product:products
+        ) {
+            if(currentdate.isAfter(product.getLimitDate())){
+                product.setExpired(true);
+                if(!bidRepository.getBidByProductId(product.getId()).isEmpty()){
+                    product.setBought(true);
+                    List<Bid> bidList= bidRepository.getBidByProductId(product.getId());
+                    product.setBuyerId(bidList.get(bidList.size()-1).getUserId());
+                }
+                else {
+                    product.setBought(false);
+                    product.setBuyerId(-1L);
+                }
+
+                productRepository.save(product);
+            }
+        }
+    }
+
+    @Override
     public void addProduct(ProductDto productDto) {
-        Product product=ProductMapper.mapToProduct(productDto);
+        Product product=ProductMapper.mapToProductWhenUpload(productDto);
         productRepository.save(product);
     }
 

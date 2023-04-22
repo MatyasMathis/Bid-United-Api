@@ -22,6 +22,7 @@ public class ProductRequestMapper {
                 .imagePath(uploadProductRequestDto.getImagePath())
                 .isApproved(uploadProductRequestDto.isApproved())
                 .rejected(uploadProductRequestDto.isRejected())
+                .expireDate(uploadProductRequestDto.getExpireDate())
                 .build();
         return uploadProductRequest;
     }
@@ -38,6 +39,7 @@ public class ProductRequestMapper {
                 .imagePath(uploadProductRequest.getImagePath())
                 .userId(uploadProductRequest.getUser().getId())
                 .name(uploadProductRequest.getName())
+                .expireDate(uploadProductRequest.getExpireDate())
                 .build();
         return uploadProductRequestDto;
     }
@@ -52,6 +54,7 @@ public class ProductRequestMapper {
                 .name(uploadProductRequest.getName())
                 .description(uploadProductRequest.getDescription())
                 .username(uploadProductRequest.getUser().getUsername())
+                .expireDate(uploadProductRequest.getExpireDate().toString())
                 .build();
         return uploadRequestOutputDto;
     }

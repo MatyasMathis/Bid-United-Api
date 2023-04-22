@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface ProductService {
     List<ProductDto> getAllProducts();
+    List<ProductDto> getAllUnsoldProducts();
     void addProduct(ProductDto productDto);
     void updateProduct(ProductDto productDto);
     void deleteById(Long id);

@@ -4,4 +4,5 @@ import com.example.bidunitedapi.bidunitedapi.dto.BidDto;
 
 public interface BidService {
     void createBid(BidDto bidDto);
+    void deleteByProductId(Long productId);
 }

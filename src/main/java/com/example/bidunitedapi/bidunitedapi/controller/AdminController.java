@@ -98,6 +98,9 @@ public class AdminController {
         productDto.setImagePath(uploadProductRequestDto.getImagePath());
         productDto.setDescription(uploadProductRequestDto.getDescription());
         productDto.setRequestId(uploadProductRequestDto.getId());
+        productDto.setExpireDate(uploadProductRequestDto.getExpireDate().toString());
+        productDto.setExpired(false);
+        productDto.setBought(false);
         return productDto;
     }
 }

@@ -19,6 +19,6 @@ public class ProductController {
 
     @GetMapping("/products")
     public List<ProductDto> getAllProducts(){
-        return productService.getAllProducts();
+        return productService.getAllUnsoldProducts();
     }
 }

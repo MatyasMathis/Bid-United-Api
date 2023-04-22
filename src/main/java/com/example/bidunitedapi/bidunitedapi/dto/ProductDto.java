@@ -20,4 +20,7 @@ public class ProductDto {
     private Long requestId;
     private String phoneNumber;
     private String email;
+    private String expireDate;
+    private Boolean expired;
+    private boolean isBought;
 }

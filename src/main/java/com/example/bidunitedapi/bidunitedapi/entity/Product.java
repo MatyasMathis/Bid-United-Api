@@ -26,4 +26,6 @@ public class Product {
     private Long requestId;
     private boolean isBought;
     private LocalDate limitDate;
+    private Long buyerId;
+    private Boolean expired;
 }

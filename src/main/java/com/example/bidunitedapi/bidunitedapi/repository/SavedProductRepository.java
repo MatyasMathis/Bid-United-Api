@@ -8,4 +8,5 @@ import java.util.List;
 public interface SavedProductRepository extends JpaRepository<SavedProduct,Long> {
     List<SavedProduct> getSavedProductByUserId(Long id);
     List<SavedProduct> getSavedProductByUserIdAndProductId(Long userId,Long productId);
+    void deleteByProductId(Long productId);
 }

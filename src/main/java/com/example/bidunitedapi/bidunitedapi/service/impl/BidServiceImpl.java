@@ -17,4 +17,9 @@ public class BidServiceImpl implements BidService {
         Bid bid= BidMapper.mapToBid(bidDto);
         bidRepository.save(bid);
     }
+
+    @Override
+    public void deleteByProductId(Long productId) {
+        bidRepository.deleteBidByProductId(productId);
+    }
 }

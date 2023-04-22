@@ -44,8 +44,10 @@ public class UserController {
         LocalDate date=LocalDate.now();
         String uploadDate=date.toString();
         long userId=Long.parseLong(uploadRequest.get("userId"));
+        int plusDays=Integer.parseInt(uploadRequest.get("days"));
+        LocalDate expireDate=LocalDate.now().plusDays(plusDays);
 
-        UploadProductRequestDto uploadProductRequestDto=new UploadProductRequestDto(name,category,year,description,imagePath,price,false,uploadDate,userId);
+        UploadProductRequestDto uploadProductRequestDto=new UploadProductRequestDto(name,category,year,description,imagePath,price,false,uploadDate,userId,expireDate);
         try {
             uploadProductRequestService.addProductRequest(uploadProductRequestDto);
             return ResponseEntity.status(HttpStatus.CREATED).build();

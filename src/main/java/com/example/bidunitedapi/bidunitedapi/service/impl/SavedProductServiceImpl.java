@@ -38,4 +38,9 @@ public class SavedProductServiceImpl implements SavedProductService {
     public void unsaveProduct(SavedProductDto savedProductDto) {
         savedProductRepository.deleteById(savedProductDto.getId());
     }
+
+    @Override
+    public void deleteByProductId(Long productId) {
+        savedProductRepository.deleteByProductId(productId);
+    }
 }

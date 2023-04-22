@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 @Builder
 @Getter
@@ -25,6 +26,7 @@ public class UploadProductRequest {
     private boolean isApproved;
     private boolean rejected;
     private String uploadDate;
+    private LocalDate expireDate;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

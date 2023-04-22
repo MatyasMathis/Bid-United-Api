@@ -4,6 +4,8 @@ import com.example.bidunitedapi.bidunitedapi.entity.User;
 import jakarta.persistence.ManyToOne;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -22,8 +24,9 @@ public class UploadProductRequestDto {
     private boolean rejected;
     private String uploadDate;
     private long userId;
+    private LocalDate expireDate;
     //private boolean isRejected;
-    public UploadProductRequestDto(String name, String category, int year, String description, String imagePath, int price, boolean isApproved, String uploadDate, long userId) {
+    public UploadProductRequestDto(String name, String category, int year, String description, String imagePath, int price, boolean isApproved, String uploadDate, long userId,LocalDate expireDate) {
         this.name = name;
         this.category = category;
         this.year = year;
@@ -34,5 +37,6 @@ public class UploadProductRequestDto {
         this.rejected=false;
         this.uploadDate = uploadDate;
         this.userId = userId;
+        this.expireDate=expireDate;
     }
 }
