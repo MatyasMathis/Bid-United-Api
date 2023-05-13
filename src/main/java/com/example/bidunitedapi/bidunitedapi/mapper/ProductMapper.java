@@ -20,6 +20,7 @@ public class ProductMapper {
                 .expireDate(product.getLimitDate().toString())
                 .expired(product.getExpired())
                 .isBought(product.isBought())
+                .validationCode(product.getValidationCode())
                 .build();
         return productDto;
     }
@@ -38,6 +39,7 @@ public class ProductMapper {
                 .limitDate(LocalDate.parse(productDto.getExpireDate()))
                 .expired(productDto.getExpired())
                 .isBought(productDto.isBought())
+                .validationCode(productDto.getValidationCode())
                 .build();
         return product;
     }
@@ -55,6 +57,7 @@ public class ProductMapper {
                 .limitDate(LocalDate.parse(productDto.getExpireDate()))
                 .expired(productDto.getExpired())
                 .isBought(productDto.isBought())
+                .validationCode(productDto.getValidationCode())
                 .build();
         return product;
     }

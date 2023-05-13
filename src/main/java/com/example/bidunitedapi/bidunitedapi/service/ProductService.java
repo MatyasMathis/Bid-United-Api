@@ -14,5 +14,7 @@ public interface ProductService {
     void deleteById(Long id);
     ProductDto findByRequestId(Long id);
     ProductDto findById(Long id);
+    List<ProductDto> getCartByUser(Long buyerId);
+   // List<ProductDto> getSoldProducts(Long sellerId);
 
 }

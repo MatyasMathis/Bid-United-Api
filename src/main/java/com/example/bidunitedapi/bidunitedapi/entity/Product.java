@@ -28,4 +28,5 @@ public class Product {
     private LocalDate limitDate;
     private Long buyerId;
     private Boolean expired;
+    private String validationCode;
 }

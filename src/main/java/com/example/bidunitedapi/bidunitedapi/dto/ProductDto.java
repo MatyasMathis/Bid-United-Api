@@ -23,4 +23,5 @@ public class ProductDto {
     private String expireDate;
     private Boolean expired;
     private boolean isBought;
+    private String validationCode;
 }

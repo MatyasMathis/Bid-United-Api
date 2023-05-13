@@ -2,10 +2,8 @@ package com.example.bidunitedapi.bidunitedapi.controller;
 
 import com.example.bidunitedapi.bidunitedapi.dto.*;
 import com.example.bidunitedapi.bidunitedapi.entity.Product;
-import com.example.bidunitedapi.bidunitedapi.service.BidService;
-import com.example.bidunitedapi.bidunitedapi.service.ProductService;
-import com.example.bidunitedapi.bidunitedapi.service.SavedProductService;
-import com.example.bidunitedapi.bidunitedapi.service.UploadProductRequestService;
+import com.example.bidunitedapi.bidunitedapi.entity.User;
+import com.example.bidunitedapi.bidunitedapi.service.*;
 import org.hibernate.mapping.Any;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,10 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.logging.Logger;
 
 @RestController
@@ -31,6 +26,8 @@ public class UserController {
 
     @Autowired
     private BidService bidService;
+    @Autowired
+    private UserService userService;
 
     @PostMapping("/user/upload-request")
     public ResponseEntity<Void> addUploadRequest(@RequestBody Map<String, String> uploadRequest){
@@ -178,8 +175,11 @@ public class UserController {
 
             for (SavedProductDto savedProduct:list
                  ) {
+
                 ProductDto productDto=productService.findById(savedProduct.getProductId());
-                productList.add(productDto);
+                if(!productDto.getExpired() && !productDto.isBought()){
+                    productList.add(productDto);
+                }
 
             }
             return new ResponseEntity<>(productList,status);
@@ -230,5 +230,63 @@ public class UserController {
         }
     }
 
+    @GetMapping("/user/bids/{userId}")
+    public ResponseEntity<List<UserBidHistoryDto>> bidHistoryForUser(@PathVariable("userId")String userId){
+        try {
+          List<BidDto> userBidList=bidService.getBidsByUser(Long.parseLong(userId));
+          List<UserBidHistoryDto> bidHistoryDtos=new ArrayList<>();
+          List<ProductDto> productDtoList=productService.getAllProducts();
+            for (BidDto bidDto:userBidList
+                 ) {
+                UserBidHistoryDto historyDto=new UserBidHistoryDto();
+                historyDto.setAmount(bidDto.getAmount());
+                historyDto.setProductId(bidDto.getProductId());
+                ProductDto matchingProduct = productDtoList.stream()
+                        .filter(obj -> obj.getId().equals(bidDto.getProductId().toString()))
+                        .findFirst()
+                        .orElse(null);
+                historyDto.setExpireDate(matchingProduct.getExpireDate());
+                historyDto.setProductName(matchingProduct.getName());
+                historyDto.setImageUrl(matchingProduct.getImagePath());
 
+                if(matchingProduct.isBought() || matchingProduct.getExpired()){
+                    historyDto.setStatus("Expired");
+                }
+                else {
+                    List<BidDto> bidListByProduct=bidService.getBidsByProduct(historyDto.getProductId());
+                    if(bidListByProduct.get(bidListByProduct.size()-1).equals(bidDto)){
+                        historyDto.setStatus("Bid is on");
+                    }
+                    else {
+                        historyDto.setStatus("Overbidden");
+                    }
+                }
+
+                bidHistoryDtos.add(historyDto);
+            }
+            Collections.reverse(bidHistoryDtos);
+            return new ResponseEntity<>(bidHistoryDtos,HttpStatus.OK);
+
+        } catch (Exception e) {
+            HttpStatus status = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<>(status);
+        }
+    }
+
+    @GetMapping("/user/cart/{buyerId}")
+    public  ResponseEntity<List<ProductDto>> cart(@PathVariable("buyerId")String buyerId){
+        try {
+            List<ProductDto> productDtoList=productService.getCartByUser(Long.parseLong(buyerId));
+            for (ProductDto product:productDtoList
+                 ) {
+                User seller=userService.findById(product.getUploaderId());
+                product.setEmail(seller.getEmail());
+                product.setPhoneNumber(seller.getPhoneNumber());
+            }
+            return new ResponseEntity<>(productDtoList,HttpStatus.OK);
+        } catch (Exception e) {
+            HttpStatus status = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<>(status);
+        }
+    }
 }

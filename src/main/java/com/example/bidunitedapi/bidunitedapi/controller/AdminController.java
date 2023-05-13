@@ -1,9 +1,7 @@
 package com.example.bidunitedapi.bidunitedapi.controller;
 
-import com.example.bidunitedapi.bidunitedapi.dto.ProductDto;
-import com.example.bidunitedapi.bidunitedapi.dto.UploadProductRequestDto;
-import com.example.bidunitedapi.bidunitedapi.dto.UploadRequestOutputDto;
-import com.example.bidunitedapi.bidunitedapi.dto.UserDto;
+import com.example.bidunitedapi.bidunitedapi.dto.*;
+import com.example.bidunitedapi.bidunitedapi.service.BidService;
 import com.example.bidunitedapi.bidunitedapi.service.ProductService;
 import com.example.bidunitedapi.bidunitedapi.service.UploadProductRequestService;
 import com.example.bidunitedapi.bidunitedapi.service.UserService;
@@ -15,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +27,8 @@ public class AdminController {
     UserService userService;
     @Autowired
     ProductService productService;
+    @Autowired
+    BidService bidService;
 
     @GetMapping("/admin/upload-requests")
     public ResponseEntity<List<UploadRequestOutputDto>> getAllRequests(){
@@ -101,6 +102,41 @@ public class AdminController {
         productDto.setExpireDate(uploadProductRequestDto.getExpireDate().toString());
         productDto.setExpired(false);
         productDto.setBought(false);
+        productDto.setValidationCode("-");
         return productDto;
     }
+
+    //Data for Charts
+    @GetMapping("/admin/stats/{productId}")
+    public List<ProductLineChartDto> getBidsByProduct(@PathVariable("productId") Long productId){
+        List<BidDto> bidList=bidService.getBidsByProduct(productId);
+        List<ProductLineChartDto> statList=new ArrayList<>();
+        for (BidDto listItem:bidList
+             ) {
+            ProductLineChartDto stat=new ProductLineChartDto();
+            stat.setAmount(listItem.getAmount());
+            stat.setUserId(listItem.getUserId());
+            stat.setDate(listItem.getCurrentDate().toString());
+
+            statList.add(stat);
+        }
+        return statList;
+    }
+
+    @GetMapping("/admin/getbids")
+    public List<ProductLineChartDto> getAllBids(){
+        List<BidDto> bidList=bidService.getAllBids();
+        List<ProductLineChartDto> statList=new ArrayList<>();
+        for (BidDto listItem:bidList
+        ) {
+            ProductLineChartDto stat=new ProductLineChartDto();
+            stat.setAmount(listItem.getAmount());
+            stat.setUserId(listItem.getUserId());
+            stat.setDate(listItem.getCurrentDate().toString());
+
+            statList.add(stat);
+        }
+        return statList;
+    }
+
 }

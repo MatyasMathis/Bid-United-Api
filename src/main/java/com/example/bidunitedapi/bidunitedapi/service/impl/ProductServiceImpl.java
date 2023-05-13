@@ -5,6 +5,7 @@ import com.example.bidunitedapi.bidunitedapi.dto.UserDto;
 import com.example.bidunitedapi.bidunitedapi.entity.Bid;
 import com.example.bidunitedapi.bidunitedapi.entity.Product;
 import com.example.bidunitedapi.bidunitedapi.entity.User;
+import com.example.bidunitedapi.bidunitedapi.mapper.BidMapper;
 import com.example.bidunitedapi.bidunitedapi.mapper.ProductMapper;
 import com.example.bidunitedapi.bidunitedapi.repository.BidRepository;
 import com.example.bidunitedapi.bidunitedapi.repository.ProductRepository;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -71,6 +73,15 @@ public class ProductServiceImpl implements ProductService {
                     product.setBought(true);
                     List<Bid> bidList= bidRepository.getBidByProductId(product.getId());
                     product.setBuyerId(bidList.get(bidList.size()-1).getUserId());
+
+                    if(product.getValidationCode().equals("-")){
+                        Random random = new Random();
+                        // Generate a random integer between 0 and 999999
+                        int code = random.nextInt(1000000);
+                        // Format the integer as a 6-digit string with leading zeros
+                        String formattedCode = String.format("%06d", code);
+                        product.setValidationCode(formattedCode);
+                    }
                 }
                 else {
                     product.setBought(false);
@@ -110,4 +121,11 @@ public class ProductServiceImpl implements ProductService {
        Product product=productRepository.findById(id).get();
        return ProductMapper.mapToDto(product);
     }
+
+    @Override
+    public List<ProductDto> getCartByUser(Long buyerId) {
+        List<Product> products=productRepository.getProductsByBuyerId(buyerId);
+        return products.stream().map(ProductMapper::mapToDto).collect(Collectors.toList());
+    }
+
 }

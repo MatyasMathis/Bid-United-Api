@@ -8,4 +8,5 @@ import java.util.List;
 public interface BidRepository extends JpaRepository<Bid,Long> {
    List<Bid> getBidByProductId(Long productId);
    void deleteBidByProductId(Long productId);
+   List<Bid> getBidByUserId(Long userId);
 }
