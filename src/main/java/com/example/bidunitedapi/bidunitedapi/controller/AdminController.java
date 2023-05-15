@@ -1,6 +1,8 @@
 package com.example.bidunitedapi.bidunitedapi.controller;
 
 import com.example.bidunitedapi.bidunitedapi.dto.*;
+import com.example.bidunitedapi.bidunitedapi.entity.Product;
+import com.example.bidunitedapi.bidunitedapi.entity.User;
 import com.example.bidunitedapi.bidunitedapi.service.BidService;
 import com.example.bidunitedapi.bidunitedapi.service.ProductService;
 import com.example.bidunitedapi.bidunitedapi.service.UploadProductRequestService;
@@ -103,6 +105,7 @@ public class AdminController {
         productDto.setExpired(false);
         productDto.setBought(false);
         productDto.setValidationCode("-");
+        productDto.setStartingPrice(uploadProductRequestDto.getPrice());
         return productDto;
     }
 
@@ -137,6 +140,59 @@ public class AdminController {
             statList.add(stat);
         }
         return statList;
+    }
+
+    //Statistics
+
+    @GetMapping("/admin/statistics")
+    public ResponseEntity<AdminStatisticsDto> getStatistics(){
+        try {
+            AdminStatisticsDto stats=new AdminStatisticsDto();
+            int nrOfUsers=userService.getAll().size();
+            int nrOfProducts=productService.getAllProducts().size();
+            int nrOfBids=bidService.getAllBids().size();
+            int sumStartingPrices=0;
+            int sumPrices=0;
+
+            ProductDto highestPriceSoldProduct=new ProductDto();
+            int highestPrice=0;
+            List<ProductDto> productDtos=productService.getAllProducts();
+            for (ProductDto product:productDtos
+                 ) {
+                if(product.isBought() && product.getPrice()>highestPrice){
+                    highestPrice=product.getPrice();
+                    highestPriceSoldProduct=product;
+                }
+                sumStartingPrices=sumStartingPrices+product.getStartingPrice();
+                sumPrices=sumPrices+product.getPrice();
+            }
+
+            List<ProductUserDto> productPerUserList=new ArrayList<>();
+            List<User> userList=userService.getAll();
+            for (User user:userList
+                 ) {
+                ProductUserDto productPerUser=new ProductUserDto();
+                productPerUser.setUsername(user.getUsername());
+                int nrOfProductPerUser=productService.getProductBySellerid(user.getId()).size();
+                productPerUser.setNrOfProducts(nrOfProductPerUser);
+
+                productPerUserList.add(productPerUser);
+            }
+
+            float averageWinOverProduct=(sumPrices-sumStartingPrices)/productDtos.size();
+
+            stats.setHighestSoldProduct(highestPriceSoldProduct);
+            stats.setNrOfBids(nrOfBids);
+            stats.setProductPerUser(productPerUserList);
+            stats.setTotalUsers(nrOfUsers);
+            stats.setTotalProducts(nrOfProducts);
+            stats.setMaxWinOverProduct(averageWinOverProduct);
+
+            return new ResponseEntity<>(stats,HttpStatus.OK);
+        } catch (Exception e) {
+            HttpStatus status = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<>(status);
+        }
     }
 
 }

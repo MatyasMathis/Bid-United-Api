@@ -1,6 +1,7 @@
 package com.example.bidunitedapi.bidunitedapi.mapper;
 
 import com.example.bidunitedapi.bidunitedapi.dto.ProductDto;
+import com.example.bidunitedapi.bidunitedapi.dto.SoldProductDto;
 import com.example.bidunitedapi.bidunitedapi.entity.Product;
 
 import java.time.LocalDate;
@@ -15,6 +16,7 @@ public class ProductMapper {
                 .year(product.getYear())
                 .imagePath(product.getImagePath())
                 .price(product.getPrice())
+                .startingPrice(product.getStartingPrice())
                 .uploaderId(product.getUploaderId())
                 .requestId(product.getRequestId())
                 .expireDate(product.getLimitDate().toString())
@@ -32,6 +34,7 @@ public class ProductMapper {
                 .name(productDto.getName())
                 .description(productDto.getDescription())
                 .imagePath(productDto.getImagePath())
+                .startingPrice(productDto.getStartingPrice())
                 .price(productDto.getPrice())
                 .year(productDto.getYear())
                 .uploaderId(productDto.getUploaderId())
@@ -50,6 +53,7 @@ public class ProductMapper {
                 .name(productDto.getName())
                 .description(productDto.getDescription())
                 .imagePath(productDto.getImagePath())
+                .startingPrice(productDto.getPrice())
                 .price(productDto.getPrice())
                 .year(productDto.getYear())
                 .uploaderId(productDto.getUploaderId())
@@ -60,5 +64,18 @@ public class ProductMapper {
                 .validationCode(productDto.getValidationCode())
                 .build();
         return product;
+    }
+
+    public static SoldProductDto mapToSoldDto(Product product){
+        SoldProductDto soldProductDto=SoldProductDto.builder()
+                .id(product.getId())
+                .name(product.getName())
+                .imagePath(product.getImagePath())
+                .validationCode(product.getValidationCode())
+                .price(product.getPrice())
+                .startingPrice(product.getStartingPrice())
+                .buyerId(product.getBuyerId())
+                .build();
+        return soldProductDto;
     }
 }

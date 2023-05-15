@@ -1,6 +1,7 @@
 package com.example.bidunitedapi.bidunitedapi.service.impl;
 
 import com.example.bidunitedapi.bidunitedapi.dto.ProductDto;
+import com.example.bidunitedapi.bidunitedapi.dto.SoldProductDto;
 import com.example.bidunitedapi.bidunitedapi.dto.UserDto;
 import com.example.bidunitedapi.bidunitedapi.entity.Bid;
 import com.example.bidunitedapi.bidunitedapi.entity.Product;
@@ -16,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -126,6 +128,25 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductDto> getCartByUser(Long buyerId) {
         List<Product> products=productRepository.getProductsByBuyerId(buyerId);
         return products.stream().map(ProductMapper::mapToDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<SoldProductDto> getSoldProductsBySellerId(Long sellerId) {
+        List<Product> products=productRepository.getProductsByUploaderId(sellerId);
+        List<Product> soldProducts=new ArrayList<>();
+        for (Product product:products) {
+            if(product.isBought()){
+                soldProducts.add(product);
+            }
+        }
+        List<SoldProductDto> soldProductDtos=soldProducts.stream().map(ProductMapper::mapToSoldDto).collect(Collectors.toList());
+        return soldProductDtos;
+    }
+
+    @Override
+    public List<ProductDto> getProductBySellerid(Long sellerId) {
+        List<Product> productList=productRepository.getProductsByUploaderId(sellerId);
+        return productList.stream().map(ProductMapper::mapToDto).collect(Collectors.toList());
     }
 
 }

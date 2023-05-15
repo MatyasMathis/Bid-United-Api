@@ -3,8 +3,11 @@ package com.example.bidunitedapi.bidunitedapi.service;
 import com.example.bidunitedapi.bidunitedapi.dto.UserDto;
 import com.example.bidunitedapi.bidunitedapi.entity.User;
 
+import java.util.List;
+
 public interface UserService {
     UserDto findByUsername(String username);
     User findById(Long id);
+    List<User> getAll();
 
 }

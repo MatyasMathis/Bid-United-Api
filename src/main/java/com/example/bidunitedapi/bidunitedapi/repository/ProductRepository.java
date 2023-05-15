@@ -8,5 +8,5 @@ import java.util.List;
 public interface ProductRepository extends JpaRepository<Product,Long> {
     Product findByRequestId(Long id);
     List<Product> getProductsByBuyerId(Long buyerId);
-    //List<Product> getProductsByBoughtIsAndUploaderId(boolean bought,Long uploaderId);
+    List<Product> getProductsByUploaderId(Long uploaderId);
 }

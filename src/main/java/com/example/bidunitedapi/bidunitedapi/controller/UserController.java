@@ -289,4 +289,22 @@ public class UserController {
             return new ResponseEntity<>(status);
         }
     }
+
+    @GetMapping("/user/sold/{sellerId}")
+    public  ResponseEntity<List<ProductDto>> getSoldItems(@PathVariable("sellerId")String sellerId){
+        try {
+            List<SoldProductDto> soldProductDtoList=productService.getSoldProductsBySellerId(Long.parseLong(sellerId));
+            for (SoldProductDto product:soldProductDtoList
+                 ) {
+                User user=userService.findById(product.getBuyerId());
+                product.setBuyerEmail(user.getEmail());
+                product.setBuyerPhone(user.getPhoneNumber());
+            }
+
+            return new ResponseEntity(soldProductDtoList,HttpStatus.OK);
+        } catch (Exception e) {
+            HttpStatus status = HttpStatus.BAD_REQUEST;
+            return new ResponseEntity<>(status);
+        }
+    }
 }
