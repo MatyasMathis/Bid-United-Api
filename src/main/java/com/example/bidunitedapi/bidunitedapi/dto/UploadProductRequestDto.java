@@ -16,6 +16,7 @@ public class UploadProductRequestDto {
     private long id;
     private String name;
     private String category;
+    private String sport;
     private int year;
     private String description;
     private String imagePath;
@@ -26,7 +27,7 @@ public class UploadProductRequestDto {
     private long userId;
     private LocalDate expireDate;
     //private boolean isRejected;
-    public UploadProductRequestDto(String name, String category, int year, String description, String imagePath, int price, boolean isApproved, String uploadDate, long userId,LocalDate expireDate) {
+    public UploadProductRequestDto(String name, String category, int year, String description, String imagePath, int price, boolean isApproved, String uploadDate, long userId,LocalDate expireDate,String sport) {
         this.name = name;
         this.category = category;
         this.year = year;
@@ -38,5 +39,6 @@ public class UploadProductRequestDto {
         this.uploadDate = uploadDate;
         this.userId = userId;
         this.expireDate=expireDate;
+        this.sport=sport;
     }
 }

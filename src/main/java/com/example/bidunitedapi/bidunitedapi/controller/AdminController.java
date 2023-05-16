@@ -106,6 +106,7 @@ public class AdminController {
         productDto.setBought(false);
         productDto.setValidationCode("-");
         productDto.setStartingPrice(uploadProductRequestDto.getPrice());
+        productDto.setSport(uploadProductRequestDto.getSport());
         return productDto;
     }
 

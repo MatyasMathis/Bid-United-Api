@@ -1,5 +1,7 @@
 package com.example.bidunitedapi.bidunitedapi.controller;
 
+import com.example.bidunitedapi.bidunitedapi.dto.RegisterDto;
+import com.example.bidunitedapi.bidunitedapi.dto.UploadRequestOutputDto;
 import com.example.bidunitedapi.bidunitedapi.dto.UserDto;
 import com.example.bidunitedapi.bidunitedapi.entity.User;
 import com.example.bidunitedapi.bidunitedapi.service.UserService;
@@ -8,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -29,6 +32,24 @@ public class LoginController {
         } else {
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<RegisterDto> register(@RequestBody RegisterDto newUser) {
+
+        try {
+            if(!userService.findByEmail(newUser.getEmail()).isEmpty()){
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+            else{
+                userService.registerNewUser(newUser);
+            }
+            return new ResponseEntity(newUser,HttpStatus.OK);
+        }
+        catch (Exception e){
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
     }
 
 }

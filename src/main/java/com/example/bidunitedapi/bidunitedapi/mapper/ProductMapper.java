@@ -23,6 +23,7 @@ public class ProductMapper {
                 .expired(product.getExpired())
                 .isBought(product.isBought())
                 .validationCode(product.getValidationCode())
+                .sport(product.getSport())
                 .build();
         return productDto;
     }
@@ -43,6 +44,7 @@ public class ProductMapper {
                 .expired(productDto.getExpired())
                 .isBought(productDto.isBought())
                 .validationCode(productDto.getValidationCode())
+                .sport(productDto.getSport())
                 .build();
         return product;
     }
@@ -62,6 +64,7 @@ public class ProductMapper {
                 .expired(productDto.getExpired())
                 .isBought(productDto.isBought())
                 .validationCode(productDto.getValidationCode())
+                .sport(productDto.getSport())
                 .build();
         return product;
     }

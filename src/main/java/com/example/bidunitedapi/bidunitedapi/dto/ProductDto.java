@@ -12,6 +12,7 @@ public class ProductDto {
     private String id;
     private String name;
     private String category;
+    private String sport;
     private int year;
     private String description;
     private String imagePath;
