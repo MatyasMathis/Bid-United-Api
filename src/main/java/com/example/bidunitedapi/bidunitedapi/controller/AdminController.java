@@ -168,6 +168,42 @@ public class AdminController {
                 sumPrices=sumPrices+product.getPrice();
             }
 
+            ProductStatusDto boughtProducts=new ProductStatusDto();
+            boughtProducts.setStatus("purchased");
+            int nrOfBoughtProducts=0;
+
+            ProductStatusDto listedProducts=new ProductStatusDto();
+            listedProducts.setStatus("listed");
+            int nrOfListedProducts=0;
+
+            ProductStatusDto expiredProducts=new ProductStatusDto();
+            expiredProducts.setStatus("expired");
+            int nrOfExpiredProducts=0;
+
+            for (ProductDto product:productDtos
+            ) {
+                if(product.isBought()){
+                    nrOfBoughtProducts++;
+                }
+                else{
+                    if(product.getExpired()){
+                        nrOfExpiredProducts++;
+                    }
+                }
+
+                if(!product.isBought() && !product.getExpired()){
+                    nrOfListedProducts++;
+                }
+            }
+            boughtProducts.setNrOfProducts(nrOfBoughtProducts);
+            expiredProducts.setNrOfProducts(nrOfExpiredProducts);
+            listedProducts.setNrOfProducts(nrOfListedProducts);
+
+            List<ProductStatusDto> statusList=new ArrayList<>();
+            statusList.add(boughtProducts);
+            statusList.add(expiredProducts);
+            statusList.add(listedProducts);
+
             List<ProductUserDto> productPerUserList=new ArrayList<>();
             List<User> userList=userService.getAll();
             for (User user:userList
@@ -188,6 +224,7 @@ public class AdminController {
             stats.setTotalUsers(nrOfUsers);
             stats.setTotalProducts(nrOfProducts);
             stats.setMaxWinOverProduct(averageWinOverProduct);
+            stats.setProductStatus(statusList);
 
             return new ResponseEntity<>(stats,HttpStatus.OK);
         } catch (Exception e) {

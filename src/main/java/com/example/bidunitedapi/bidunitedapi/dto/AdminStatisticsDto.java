@@ -15,6 +15,7 @@ public class AdminStatisticsDto {
     private int totalProducts;
     private float maxWinOverProduct;
     private List<ProductUserDto> productPerUser;
+    private List<ProductStatusDto> productStatus;
     private int nrOfBids;
     private ProductDto highestSoldProduct;
 

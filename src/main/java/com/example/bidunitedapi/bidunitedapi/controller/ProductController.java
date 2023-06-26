@@ -21,4 +21,14 @@ public class ProductController {
     public List<ProductDto> getAllProducts(){
         return productService.getAllUnsoldProducts();
     }
+
+    @GetMapping("/products/unsold")
+    public List<ProductDto> getAllUnsoldProducts(){
+        return productService.getAllUnsoldProducts();
+    }
+
+    @GetMapping("/products/sold")
+    public List<ProductDto> getAllSoldProducts(){
+        return productService.getAllSoldProducts();
+    }
 }

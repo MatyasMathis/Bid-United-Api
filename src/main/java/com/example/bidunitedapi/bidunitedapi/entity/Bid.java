@@ -20,6 +20,4 @@ public class Bid {
     private Long productId;
     private LocalDate bidDate;
     private int amount;
-
-
 }

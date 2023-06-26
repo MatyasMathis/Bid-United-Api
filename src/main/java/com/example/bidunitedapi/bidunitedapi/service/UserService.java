@@ -9,6 +9,7 @@ import java.util.List;
 public interface UserService {
     UserDto findByUsername(String username);
     List<UserDto> findByEmail(String email);
+    List<UserDto> findUsersByUsername(String username);
     User findById(Long id);
     List<User> getAll();
     void registerNewUser(RegisterDto newUser);

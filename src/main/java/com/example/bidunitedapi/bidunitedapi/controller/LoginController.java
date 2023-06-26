@@ -38,7 +38,7 @@ public class LoginController {
     public ResponseEntity<RegisterDto> register(@RequestBody RegisterDto newUser) {
 
         try {
-            if(!userService.findByEmail(newUser.getEmail()).isEmpty()){
+            if(!userService.findByEmail(newUser.getEmail()).isEmpty() || !userService.findUsersByUsername(newUser.getUsername()).isEmpty()){
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
             else{

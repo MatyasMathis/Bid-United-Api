@@ -63,6 +63,23 @@ public class ProductServiceImpl implements ProductService {
         return productDtos;
     }
 
+    @Override
+    public List<ProductDto> getAllSoldProducts() {
+        verifyExpiredProducts();
+        List<Product> products=productRepository.findAll();
+        List<ProductDto> productDtos= products.stream() .filter(product -> product.isBought()).map(ProductMapper::mapToDto).collect(Collectors.toList());
+
+        for (ProductDto product:productDtos
+        ) {
+
+            User user=userRepository.findById(product.getUploaderId()).get();
+            product.setPhoneNumber(user.getPhoneNumber());
+            product.setEmail(user.getEmail());
+        }
+
+        return productDtos;
+    }
+
     public void verifyExpiredProducts(){
         List<Product> products=productRepository.findAll();
         LocalDate currentdate=LocalDate.now();

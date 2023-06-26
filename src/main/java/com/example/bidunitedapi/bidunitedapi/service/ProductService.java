@@ -10,6 +10,7 @@ import java.util.List;
 public interface ProductService {
     List<ProductDto> getAllProducts();
     List<ProductDto> getAllUnsoldProducts();
+    List<ProductDto> getAllSoldProducts();
     void addProduct(ProductDto productDto);
     void updateProduct(ProductDto productDto);
     void deleteById(Long id);
@@ -19,5 +20,4 @@ public interface ProductService {
    // List<ProductDto> getSoldProducts(Long sellerId);
     List<SoldProductDto> getSoldProductsBySellerId(Long sellerId);
     List<ProductDto> getProductBySellerid(Long sellerId);
-
 }
