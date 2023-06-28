@@ -10,6 +10,8 @@ public class UserMapper {
                 .password(user.getPassword())
                 .token(user.getToken())
                 .username(user.getUsername())
+                .phoneNumber(user.getPhoneNumber())
+                .email(user.getEmail())
                 .build();
         return userDto;
     }

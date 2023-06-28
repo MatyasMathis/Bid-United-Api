@@ -12,6 +12,7 @@ public interface UserService {
     List<UserDto> findUsersByUsername(String username);
     User findById(Long id);
     List<User> getAll();
+    List<UserDto> getAllUsers();
     void registerNewUser(RegisterDto newUser);
 
 }

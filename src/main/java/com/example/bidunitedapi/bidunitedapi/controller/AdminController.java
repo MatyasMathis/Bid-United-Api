@@ -233,4 +233,20 @@ public class AdminController {
         }
     }
 
+    @GetMapping("/admin/users")
+    public ResponseEntity<List<UserDto>> getAllUsers(){
+        try{
+            HttpStatus status = HttpStatus.OK;
+            List<UserDto> list=userService.getAllUsers();
+            return new ResponseEntity<>(list,status);
+        }
+        catch (Exception e)
+        {
+            HttpStatus status = HttpStatus.NOT_FOUND;
+            return new ResponseEntity<>(status);
+        }
+
+    }
+
+
 }

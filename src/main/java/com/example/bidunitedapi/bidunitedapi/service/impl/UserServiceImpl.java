@@ -46,6 +46,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<UserDto> getAllUsers() {
+        List<User> user=userRepository.findAll();
+        return user.stream().map(UserMapper::mapToDto).collect(Collectors.toList());
+    }
+
+    @Override
     public void registerNewUser(RegisterDto newUser) {
         User user=new User();
         user.setEmail(newUser.getEmail());
