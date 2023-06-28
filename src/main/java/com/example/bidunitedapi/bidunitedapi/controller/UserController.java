@@ -9,7 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.logging.Logger;
@@ -30,13 +37,13 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/user/upload-request")
-    public ResponseEntity<Void> addUploadRequest(@RequestBody Map<String, String> uploadRequest){
+    public ResponseEntity<Void> addUploadRequest(@RequestParam("file") MultipartFile file, @RequestParam Map<String, String> uploadRequest) throws IOException {
         System.out.println("Received upload request with parameters:"+ uploadRequest);
         String name=uploadRequest.get("name");
         String category=uploadRequest.get("category");
         int year=Integer.parseInt(uploadRequest.get("year"));
         String description=uploadRequest.get("description");
-        String imagePath=uploadRequest.get("imagePath");
+        String imagePath=saveFile(file);
         int price =Integer.parseInt(uploadRequest.get("price"));
         LocalDate date=LocalDate.now();
         String uploadDate=date.toString();
@@ -53,6 +60,18 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    private String saveFile(MultipartFile file) throws IOException {
+        String fileName = file.getOriginalFilename();
+        String filePath = "C:/Users/User/OneDrive/Desktop/Facultate/Licenta/frontend/bid-commercial-app/src/assets/images/" + fileName; // Remove the leading slash ("/") for relative path
+
+        Path destPath = Paths.get(filePath); // Use Paths.get() instead of Path.of() for compatibility
+
+        Files.copy(file.getInputStream(), destPath, StandardCopyOption.REPLACE_EXISTING);
+
+        return "./assets/images/"+ fileName;
+    }
+
 
     @GetMapping("/user/my-requests")
     public ResponseEntity<List<UploadRequestOutputDto>> getRequestsByUser(@RequestParam("username") String username){

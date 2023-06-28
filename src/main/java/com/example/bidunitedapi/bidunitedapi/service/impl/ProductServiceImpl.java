@@ -32,6 +32,7 @@ public class ProductServiceImpl implements ProductService {
     private BidRepository bidRepository;
     @Override
     public List<ProductDto> getAllProducts() {
+        verifyExpiredProducts();
         List<Product> products=productRepository.findAll();
         List<ProductDto> productDtos= products.stream().map(ProductMapper::mapToDto).collect(Collectors.toList());
 
